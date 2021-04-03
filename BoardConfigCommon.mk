@@ -16,10 +16,12 @@
 PLATFORM_PATH := device/samsung/msm8916-common
 
 # Includes
-TARGET_SPECIFIC_HEADER_PATH := $(PLATFORM_PATH)/include
+TARGET_SPECIFIC_HEADER_PATH += $(PLATFORM_PATH)/include
 
 # Inherit from common
 -include device/samsung/qcom-common/BoardConfigCommon.mk
+
+BUILD_BROKEN_USES_BUILD_COPY_HEADERS := true
 
 # Architecture/platform
 BOARD_VENDOR := samsung
@@ -38,31 +40,19 @@ TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 # ANT+
 BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
 
+# Art
+TARGET_HAS_MEMFD_BACKPORT := true
+
 # Audio
-AUDIO_CONFIG_PATH := hardware/qcom/audio-caf/msm8916/configs
+AUDIO_FEATURE_SAMSUNG_DUAL_SIM := true
+AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
+AUDIO_FEATURE_ENABLED_COMPRESS_VOIP := false
+AUDIO_FEATURE_ENABLED_INCALL_MUSIC := true
 BOARD_USES_ALSA_AUDIO := true
 BOARD_USES_GENERIC_AUDIO := true
 TARGET_USES_QCOM_MM_AUDIO := true
 USE_CUSTOM_AUDIO_POLICY := 1
 USE_XML_AUDIO_POLICY_CONF := 1
-
-# Mixer paths
-ifneq ($(USE_CUSTOM_MIXER_PATHS), true)
-PRODUCT_COPY_FILES += \
-    $(PLATFORM_PATH)/configs/audio/mixer_paths.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/mixer_paths.xml
-endif
-
-#XML Audio configuration files
-ifeq ($(USE_XML_AUDIO_POLICY_CONF), 1)
-PRODUCT_COPY_FILES += \
-    $(PLATFORM_PATH)/configs/audio/audio_effects.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/audio_effects.xml \
-    $(AUDIO_CONFIG_PATH)/msm8916_32/audio_policy_configuration.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/audio_policy_configuration.xml \
-    frameworks/av/services/audiopolicy/config/a2dp_audio_policy_configuration.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/a2dp_audio_policy_configuration.xml \
-    frameworks/av/services/audiopolicy/config/audio_policy_volumes.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/audio_policy_volumes.xml \
-    frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/default_volume_tables.xml \
-    frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/r_submix_audio_policy_configuration.xml \
-    frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/usb_audio_policy_configuration.xml
-endif
 
 # Binder API version
 TARGET_USES_64_BIT_BINDER := true
@@ -82,12 +72,10 @@ TARGET_BOOTLOADER_BOARD_NAME := MSM8916
 
 # Camera
 BOARD_GLOBAL_CFLAGS += -DMETADATA_CAMERA_SOURCE
-TARGET_HAS_LEGACY_CAMERA_HAL1 := true
-TARGET_NEEDS_LEGACY_CAMERA_HAL1_DYN_NATIVE_HANDLE := true
+TARGET_HAS_LEGACY_CAMERA_HAL1 ?= false
 TARGET_PROVIDES_CAMERA_HAL := true
 TARGET_USE_VENDOR_CAMERA_EXT := true
 TARGET_USES_QTI_CAMERA_DEVICE := true
-USE_DEVICE_SPECIFIC_CAMERA := true
 
 # Charger
 BOARD_CHARGER_ENABLE_SUSPEND := true
@@ -95,9 +83,6 @@ BOARD_CHARGER_SHOW_PERCENTAGE := true
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
 
 # Display
-MAX_EGL_CACHE_KEY_SIZE := 12*1024
-MAX_EGL_CACHE_SIZE := 2048*1024
-NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
 TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
 OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
 MAX_VIRTUAL_DISPLAY_DIMENSION := 2048
@@ -105,7 +90,11 @@ TARGET_ADDITIONAL_GRALLOC_10_USAGE_BITS := 0x02000000U
 TARGET_CONTINUOUS_SPLASH_ENABLED := true
 TARGET_HAVE_NEW_GRALLOC := true
 TARGET_USES_GRALLOC1 := true
-TARGET_USES_NEW_ION_API := true
+SF_START_GRAPHICS_ALLOCATOR_SERVICE := true
+NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
+TARGET_USE_COMPAT_GRALLOC_PERFORM := true
+TARGET_USES_C2D_COMPOSITION := true
+TARGET_DISABLE_POSTRENDER_CLEANUP := true
 
 # Encryption
 TARGET_LEGACY_HW_DISK_ENCRYPTION := true
@@ -124,6 +113,7 @@ endif
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_HAS_LARGE_FILESYSTEM := true
 BOARD_SYSTEMIMAGE_PARTITION_TYPE := ext4
+TARGET_FS_CONFIG_GEN := $(PLATFORM_PATH)/config.fs
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 
@@ -134,17 +124,12 @@ AUDIO_FEATURE_ENABLED_FM_POWER_OPT := true
 
 # GPS
 TARGET_NO_RPC := true
-USE_DEVICE_SPECIFIC_GPS := true
-
-# Healthd
-#BOARD_HAL_STATIC_LIBRARIES := libhealthd.lineage
 
 # HIDL
 DEVICE_MANIFEST_FILE := $(PLATFORM_PATH)/manifest.xml
-
-# Init
-TARGET_INIT_VENDOR_LIB := libinit_msm8916
-TARGET_RECOVERY_DEVICE_MODULES := $(PLATFORM_PATH)/init
+ifeq ($(filter gt58wifi gt510wifi gtelwifiue,$(TARGET_DEVICE)),)
+DEVICE_MANIFEST_FILE += $(PLATFORM_PATH)/manifest_telephony.xml
+endif
 
 # Kernel
 BOARD_KERNEL_CMDLINE += \
@@ -158,7 +143,7 @@ BOARD_KERNEL_CMDLINE += \
     loop.max_part=7
 
 BOARD_CUSTOM_BOOTIMG := true
-BOARD_CUSTOM_BOOTIMG_MK := hardware/samsung/mkbootimg.mk
+BOARD_CUSTOM_BOOTIMG_MK := $(PLATFORM_PATH)/mkbootimg.mk
 BOARD_DTBTOOL_ARGS := -2
 BOARD_KERNEL_BASE := 0x80000000
 BOARD_KERNEL_IMAGE_NAME := zImage
@@ -166,14 +151,15 @@ BOARD_KERNEL_PAGESIZE := 2048
 BOARD_KERNEL_SEPARATED_DT := true
 BOARD_KERNEL_TAGS_OFFSET := 0x01E00000
 BOARD_RAMDISK_OFFSET := 0x02000000
-LZMA_RAMDISK_TARGETS := recovery
+BOARD_RAMDISK_USE_XZ := true
+BOARD_ROOT_EXTRA_FOLDERS := efs firmware firmware-modem persist
 TARGET_KERNEL_CONFIG := msm8916_sec_defconfig
 TARGET_KERNEL_SELINUX_CONFIG := selinux_defconfig
 TARGET_KERNEL_SELINUX_LOG_CONFIG := selinux_log_defconfig
 TARGET_KERNEL_SOURCE := kernel/samsung/msm8916
 
 # Lights
-#TARGET_PROVIDES_LIBLIGHT := true
+TARGET_PROVIDES_LIBLIGHT := true
 
 # Malloc implementation
 MALLOC_SVELTE := true
@@ -205,6 +191,9 @@ TARGET_HAS_LEGACY_POWER_STATS := true
 TARGET_HAS_NO_POWER_STATS := true
 TARGET_HAS_NO_WLAN_STATS := true
 TARGET_USES_INTERACTION_BOOST := true
+
+# Radio
+TARGET_USES_OLD_MNC_FORMAT := true
 
 # Protobuf
 PROTOBUF_SUPPORTED := true
@@ -254,7 +243,7 @@ endif
 # SELinux
 include device/qcom/sepolicy-legacy/sepolicy.mk
 
-BOARD_SEPOLICY_DIRS += \
+BOARD_VENDOR_SEPOLICY_DIRS += \
     $(PLATFORM_PATH)/sepolicy
 
 # Shims
@@ -264,7 +253,8 @@ TARGET_LD_SHIM_LIBS := \
     /vendor/lib/libsec-ril-dsds.so|libshim_secril.so \
     /vendor/lib/hw/camera.vendor.msm8916.so|libcamera_shim.so \
     /vendor/lib/libizat_core.so|libshim_gps.so \
-    /vendor/lib/libqomx_jpegenc.so|libboringssl-compat.so
+    /vendor/lib/libqomx_jpegenc.so|libboringssl-compat.so \
+    /vendor/lib/hw/android.hardware.bluetooth@1.0-impl-qti.so|libbase_shim.so
 
 # Snapdragon LLVM
 TARGET_USE_SDCLANG := true
@@ -293,5 +283,7 @@ TARGET_USES_QCOM_WCNSS_QMI := true
 TARGET_USES_WCNSS_CTRL := true
 WIFI_DRIVER_FW_PATH_AP := "ap"
 WIFI_DRIVER_FW_PATH_STA := "sta"
+WIFI_HIDL_FEATURE_DISABLE_AP_MAC_RANDOMIZATION := true
+WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
 WLAN_CHIPSET := pronto
 WPA_SUPPLICANT_VERSION := VER_0_8_X
