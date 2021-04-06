@@ -37,17 +37,16 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Audio
 PRODUCT_PACKAGES += \
     android.hardware.audio@2.0-impl \
-    android.hardware.audio@2.0-service \
     android.hardware.audio.effect@2.0-impl \
     android.hardware.bluetooth.audio@2.0-impl \
     android.hardware.soundtrigger@2.0-impl \
+    android.hardware.audio.service \
     audio.a2dp.default \
     audio.bluetooth.default \
     audio.primary.msm8916 \
     audio.primary.default \
     audio.r_submix.default \
     audio.usb.default \
-    libaudioresampler \
     libqcompostprocbundle \
     libqcomvisualizer \
     libqcomvoiceprocessing \
@@ -136,8 +135,8 @@ PRODUCT_PACKAGES += \
     android.hardware.camera.provider@2.4-impl \
     android.hardware.camera.provider@2.4-service \
     libcamera_shim \
-    libmm-qcamera \
-    camera.msm8916
+    camera.msm8916 \
+    Snap
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/camera/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xml
@@ -167,14 +166,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PACKAGES += \
     android.hardware.graphics.allocator@2.0-impl \
     android.hardware.graphics.allocator@2.0-service \
-    android.hardware.graphics.composer@2.1-impl \
     android.hardware.graphics.composer@2.1-service \
     android.hardware.graphics.mapper@2.0-impl \
     android.hardware.memtrack@1.0-impl \
     android.hardware.memtrack@1.0-service \
     gralloc.msm8916 \
     hwcomposer.msm8916 \
-    libgenlock \
     libtinyxml \
     libtinyxml2 \
     memtrack.msm8916
@@ -187,7 +184,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.drm@1.0-impl \
     android.hardware.drm@1.0-service \
-    android.hardware.drm@1.1-service.widevine \
     android.hardware.drm@1.2-service.clearkey
 
 # Ebtables
@@ -214,8 +210,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # FS
 PRODUCT_PACKAGES += \
     fs_config_files \
-    fsck.f2fs \
-    mkfs.f2fs
+    fsck.f2fs
 
 # FlipFlap
 PRODUCT_PACKAGES += \
@@ -278,6 +273,12 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayout/gpio-keys.kl:$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/gpio-keys.kl
 
 # Keymaster
+ifneq ($(TARGET_PROVIDES_KEYMASTER),true)
+PRODUCT_PACKAGES += \
+    keystore.msm8916
+endif
+
+# Keymaster
 PRODUCT_PACKAGES += \
     android.hardware.keymaster@3.0-impl \
     android.hardware.keymaster@3.0-service
@@ -303,9 +304,6 @@ PRODUCT_COPY_FILES += \
 
 # Media
 PRODUCT_PACKAGES += \
-    libextmedia_jni \
-    libdashplayer \
-    libdivxdrmdecrypt \
     libdrmclearkeyplugin \
     libstagefrighthw
 
@@ -317,12 +315,8 @@ PRODUCT_PACKAGES += \
     libOmxCore \
     libOmxEvrcEnc \
     libOmxQcelp13Enc \
-    libOmxSwVencMpeg4 \
     libOmxVdec \
-    libOmxVdecHevc \
-    libOmxVenc \
-    libOmxVidEnc \
-    libOmxVdpp
+    libOmxVenc
 
 # Media
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -352,7 +346,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Misc
 PRODUCT_PACKAGES += \
     curl \
-    libbson \
     libcurl \
     libkeyutils \
     tcpdump
@@ -392,6 +385,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.usb.accessory.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.accessory.xml \
     frameworks/native/data/etc/android.hardware.usb.host.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.host.xml \
     frameworks/native/data/etc/android.hardware.wifi.direct.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.direct.xml \
+    frameworks/native/data/etc/android.hardware.wifi.passpoint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.passpoint.xml \
     frameworks/native/data/etc/android.hardware.wifi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.xml \
     frameworks/native/data/etc/android.software.midi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.midi.xml \
     frameworks/native/data/etc/android.software.sip.voip.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.sip.voip.xml \
@@ -426,7 +420,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Ramdisk
 PRODUCT_PACKAGES += \
     fstab.qcom \
-    init.carrier.rc \
     init.class_main.sh \
     init.link_ril_db.sh \
     init.qcom.fm.sh \
@@ -537,7 +530,6 @@ PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-service \
     hostapd \
     hostapd_cli \
-    iwconfig \
     libwpa_client \
     libwcnss_qmi \
     wcnss_service \
