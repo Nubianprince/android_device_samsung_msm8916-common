@@ -5,3 +5,5 @@ allow zygote exported_camera_prop:file { read };
 allow zygote exported_camera_prop:file { open };
 allow zygote proc_cmdline:file { read };
 allow zygote proc_cmdline:file { open };
+allow zygote exported_camera_prop:file { getattr };
+allow zygote proc_cmdline:file { getattr };

@@ -69,13 +69,10 @@ TARGET_BOOTLOADER_BOARD_NAME := MSM8916
 
 # Camera
 BOARD_GLOBAL_CFLAGS += -DMETADATA_CAMERA_SOURCE
-TARGET_HAS_LEGACY_CAMERA_HAL1 := true
-TARGET_NEEDS_LEGACY_CAMERA_HAL1_DYN_NATIVE_HANDLE := true
+TARGET_HAS_LEGACY_CAMERA_HAL1 ?= false
 TARGET_PROVIDES_CAMERA_HAL := true
 TARGET_USE_VENDOR_CAMERA_EXT := true
 TARGET_USES_QTI_CAMERA_DEVICE := true
-TARGET_USES_NON_TREBLE_CAMERA := true
-USE_DEVICE_SPECIFIC_CAMERA := true
 
 # Charger
 BOARD_CHARGER_ENABLE_SUSPEND := true
@@ -96,8 +93,17 @@ TARGET_USES_C2D_COMPOSITION := true
 TARGET_DISABLE_POSTRENDER_CLEANUP := true
 
 # Encryption
-TARGET_HW_DISK_ENCRYPTION := true
 TARGET_LEGACY_HW_DISK_ENCRYPTION := true
+TARGET_HW_KEYMASTER_V03 := true
+TARGET_KEYMASTER_WAIT_FOR_QSEE := true
+
+ifeq ($(RECOVERY_VARIANT),twrp)
+    TARGET_HW_DISK_ENCRYPTION := false
+    TARGET_SWV8_DISK_ENCRYPTION := false
+else
+    TARGET_HW_DISK_ENCRYPTION := true
+    TARGET_SWV8_DISK_ENCRYPTION := true
+endif
 
 # Filesystems
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
@@ -106,10 +112,8 @@ TARGET_FS_CONFIG_GEN := $(PLATFORM_PATH)/config.fs
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 
-
 # HIDL
 DEVICE_MANIFEST_FILE := $(PLATFORM_PATH)/manifest.xml
-PRODUCT_ENFORCE_VINTF_MANIFEST_OVERRIDE := true
 ifeq ($(filter gt58wifi gt510wifi gtelwifiue,$(TARGET_DEVICE)),)
 DEVICE_MANIFEST_FILE += $(PLATFORM_PATH)/manifest_telephony.xml
 endif
@@ -139,13 +143,7 @@ BOARD_ROOT_EXTRA_FOLDERS := efs firmware firmware-modem persist
 TARGET_KERNEL_CONFIG := msm8916_sec_defconfig
 TARGET_KERNEL_SELINUX_CONFIG := selinux_defconfig
 TARGET_KERNEL_SELINUX_LOG_CONFIG := selinux_log_defconfig
-TARGET_KERNEL_SOURCE := kernel/samsung/evervolv
-
-# Kernel - Toolchain
-ifneq ($(wildcard $(BUILD_TOP)/prebuilts/gcc/$(HOST_OS)-x86/arm/arm-eabi-7.2/bin),)
-    KERNEL_TOOLCHAIN := $(BUILD_TOP)/prebuilts/gcc/$(HOST_OS)-x86/arm/arm-eabi-7.2/bin
-    KERNEL_TOOLCHAIN_PREFIX := arm-eabi-
-endif
+TARGET_KERNEL_SOURCE := kernel/samsung/ev
 
 # Lights
 TARGET_PROVIDES_LIBLIGHT := true
@@ -159,9 +157,6 @@ TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
 
 # Network Routing
 TARGET_NEEDS_NETD_DIRECT_CONNECT_RULE := true
-
-# NFC
-BOARD_NFC_HAL_SUFFIX := msm8916
 
 # Partition sizes
 BOARD_BOOTIMAGE_PARTITION_SIZE := 13631488
@@ -243,7 +238,6 @@ TARGET_LD_SHIM_LIBS := \
     /vendor/lib/libizat_core.so|libshim_gps.so \
     /vendor/lib/libqomx_jpegenc.so|libboringssl-compat.so \
     /vendor/lib/hw/android.hardware.bluetooth@1.0-impl-qti.so|libbase_shim.so
-
 
 # Time services
 BOARD_USES_QC_TIME_SERVICES := true
