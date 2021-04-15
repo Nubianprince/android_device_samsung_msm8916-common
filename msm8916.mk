@@ -99,8 +99,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     vendor.voice.playback.conc.disabled=true \
     vendor.voice.record.conc.disabled=true \
     vendor.voice.voip.conc.disabled=true
-
-# Bluetooth
+    
 PRODUCT_PACKAGES += \
     libbase_shim \
     libbt-vendor
@@ -114,7 +113,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.qualcomm.bt.hci_transport=smd \
     vendor.qcom.bluetooth.soc=pronto \
     vendor.bluetooth.soc=pronto
-
+    
 # BoringSSL Hacks
 PRODUCT_PACKAGES += \
     libboringssl-compat

@@ -69,10 +69,13 @@ TARGET_BOOTLOADER_BOARD_NAME := MSM8916
 
 # Camera
 BOARD_GLOBAL_CFLAGS += -DMETADATA_CAMERA_SOURCE
-TARGET_HAS_LEGACY_CAMERA_HAL1 ?= false
+TARGET_HAS_LEGACY_CAMERA_HAL1 := true
+TARGET_NEEDS_LEGACY_CAMERA_HAL1_DYN_NATIVE_HANDLE := true
 TARGET_PROVIDES_CAMERA_HAL := true
 TARGET_USE_VENDOR_CAMERA_EXT := true
 TARGET_USES_QTI_CAMERA_DEVICE := true
+TARGET_USES_NON_TREBLE_CAMERA := true
+USE_DEVICE_SPECIFIC_CAMERA := true
 
 # Charger
 BOARD_CHARGER_ENABLE_SUSPEND := true
@@ -238,6 +241,9 @@ TARGET_LD_SHIM_LIBS := \
     /vendor/lib/libizat_core.so|libshim_gps.so \
     /vendor/lib/libqomx_jpegenc.so|libboringssl-compat.so \
     /vendor/lib/hw/android.hardware.bluetooth@1.0-impl-qti.so|libbase_shim.so
+
+# Snapdragon LLVM
+TARGET_USE_SDCLANG := true
 
 # Time services
 BOARD_USES_QC_TIME_SERVICES := true
