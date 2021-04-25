@@ -39,30 +39,11 @@ TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
 
 # Audio
-AUDIO_CONFIG_PATH := hardware/qcom/audio-caf/msm8916/configs
 BOARD_USES_ALSA_AUDIO := true
 BOARD_USES_GENERIC_AUDIO := true
 TARGET_USES_QCOM_MM_AUDIO := true
 USE_CUSTOM_AUDIO_POLICY := 1
 USE_XML_AUDIO_POLICY_CONF := 1
-
-# Mixer paths
-ifneq ($(USE_CUSTOM_MIXER_PATHS), true)
-PRODUCT_COPY_FILES += \
-    $(PLATFORM_PATH)/configs/audio/mixer_paths.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/mixer_paths.xml
-endif
-
-#XML Audio configuration files
-ifeq ($(USE_XML_AUDIO_POLICY_CONF), 1)
-PRODUCT_COPY_FILES += \
-    $(PLATFORM_PATH)/configs/audio/audio_effects.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/audio_effects.xml \
-    $(AUDIO_CONFIG_PATH)/msm8916_32/audio_policy_configuration.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/audio_policy_configuration.xml \
-    frameworks/av/services/audiopolicy/config/a2dp_audio_policy_configuration.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/a2dp_audio_policy_configuration.xml \
-    frameworks/av/services/audiopolicy/config/audio_policy_volumes.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/audio_policy_volumes.xml \
-    frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/default_volume_tables.xml \
-    frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/r_submix_audio_policy_configuration.xml \
-    frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/usb_audio_policy_configuration.xml
-endif
 
 # Binder API version
 TARGET_USES_64_BIT_BINDER := true
@@ -82,8 +63,7 @@ TARGET_BOOTLOADER_BOARD_NAME := MSM8916
 
 # Camera
 BOARD_GLOBAL_CFLAGS += -DMETADATA_CAMERA_SOURCE
-TARGET_HAS_LEGACY_CAMERA_HAL1 := true
-TARGET_NEEDS_LEGACY_CAMERA_HAL1_DYN_NATIVE_HANDLE := true
+TARGET_HAS_LEGACY_CAMERA_HAL1 ?= false
 TARGET_PROVIDES_CAMERA_HAL := true
 TARGET_USE_VENDOR_CAMERA_EXT := true
 TARGET_USES_QTI_CAMERA_DEVICE := true
@@ -124,27 +104,16 @@ endif
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_HAS_LARGE_FILESYSTEM := true
 BOARD_SYSTEMIMAGE_PARTITION_TYPE := ext4
+TARGET_FS_CONFIG_GEN := $(PLATFORM_PATH)/config.fs
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
-
-# FM
-AUDIO_FEATURE_ENABLED_FM := true
-BOARD_HAVE_QCOM_FM := true
-AUDIO_FEATURE_ENABLED_FM_POWER_OPT := true
 
 # GPS
 TARGET_NO_RPC := true
 USE_DEVICE_SPECIFIC_GPS := true
 
-# Healthd
-#BOARD_HAL_STATIC_LIBRARIES := libhealthd.lineage
-
 # HIDL
 DEVICE_MANIFEST_FILE := $(PLATFORM_PATH)/manifest.xml
-
-# Init
-TARGET_INIT_VENDOR_LIB := libinit_msm8916
-TARGET_RECOVERY_DEVICE_MODULES := $(PLATFORM_PATH)/init
 
 # Kernel
 BOARD_KERNEL_CMDLINE += \
@@ -158,7 +127,7 @@ BOARD_KERNEL_CMDLINE += \
     loop.max_part=7
 
 BOARD_CUSTOM_BOOTIMG := true
-BOARD_CUSTOM_BOOTIMG_MK := hardware/samsung/mkbootimg.mk
+BOARD_CUSTOM_BOOTIMG_MK := $(PLATFORM_PATH)/mkbootimg.mk
 BOARD_DTBTOOL_ARGS := -2
 BOARD_KERNEL_BASE := 0x80000000
 BOARD_KERNEL_IMAGE_NAME := zImage
@@ -166,14 +135,15 @@ BOARD_KERNEL_PAGESIZE := 2048
 BOARD_KERNEL_SEPARATED_DT := true
 BOARD_KERNEL_TAGS_OFFSET := 0x01E00000
 BOARD_RAMDISK_OFFSET := 0x02000000
+BOARD_ROOT_EXTRA_FOLDERS := efs firmware firmware-modem persist
 LZMA_RAMDISK_TARGETS := recovery
 TARGET_KERNEL_CONFIG := msm8916_sec_defconfig
 TARGET_KERNEL_SELINUX_CONFIG := selinux_defconfig
 TARGET_KERNEL_SELINUX_LOG_CONFIG := selinux_log_defconfig
-TARGET_KERNEL_SOURCE := kernel/samsung/msm8916
+TARGET_KERNEL_SOURCE := kernel/samsung/ev
 
 # Lights
-#TARGET_PROVIDES_LIBLIGHT := true
+TARGET_PROVIDES_LIBLIGHT := true
 
 # Malloc implementation
 MALLOC_SVELTE := true
@@ -264,7 +234,8 @@ TARGET_LD_SHIM_LIBS := \
     /vendor/lib/libsec-ril-dsds.so|libshim_secril.so \
     /vendor/lib/hw/camera.vendor.msm8916.so|libcamera_shim.so \
     /vendor/lib/libizat_core.so|libshim_gps.so \
-    /vendor/lib/libqomx_jpegenc.so|libboringssl-compat.so
+    /vendor/lib/libqomx_jpegenc.so|libboringssl-compat.so \
+    /vendor/lib/hw/android.hardware.bluetooth@1.0-impl-qti.so|libbase_shim.so
 
 # Snapdragon LLVM
 TARGET_USE_SDCLANG := true
