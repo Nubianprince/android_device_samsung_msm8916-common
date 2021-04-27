@@ -28,6 +28,9 @@
 # Firmware
 /firmware-modem(/.*)?                                u:object_r:firmware_file:s0
 
+# Gatekeeper
+/(vendor|system/vendor)/bin/hw/android\.hardware\.gatekeeper@1\.0-service\.software       u:object_r:hal_gatekeeper_default_exec:s0
+
 # Macloader
 /system/bin/macloader                                u:object_r:macloader_exec:s0
 
@@ -44,7 +47,9 @@
 # RIL
 /dev/socket/rild-cas                                 u:object_r:rild_cas_socket:s0
 
-/tombstones             u:object_r:rootfs:s0
+# TimeKeep
+/sys/devices/soc\.0/qpnp-rtc-[0-9]/rtc/rtc0(/.*)?    u:object_r:sysfs_rtc:s0
+/(system/vendor|vendor)/bin/timekeep                 u:object_r:timekeep_exec:s0
 
 # USB
 /sys/devices/platform/msm_hsusb/gadget/lun0(/.*)?    u:object_r:sysfs_android_usb:s0
