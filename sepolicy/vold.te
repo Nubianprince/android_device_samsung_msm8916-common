@@ -1,1 +1,3 @@
 allow vold efs_file:dir { read };
+allow vold efs_file:dir { open };
+allow vold efs_file:dir { ioctl };
