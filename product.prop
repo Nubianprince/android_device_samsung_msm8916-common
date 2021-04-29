@@ -1,0 +1,2 @@
+# SELinux
+ro.build.selinux=1

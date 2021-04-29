@@ -23,7 +23,8 @@ PRODUCT_SOONG_NAMESPACES += \
 
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += \
-    $(LOCAL_PATH)/overlay
+    $(LOCAL_PATH)/overlay \
+     $(LOCAL_PATH)/overlay-lineage
 
 # Assistant
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -338,6 +339,7 @@ PRODUCT_COPY_FILES += \
 # OEM Unlock
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.oem_unlock_supported=0
+
 
 # Perf
 PRODUCT_PROPERTY_OVERRIDES += \

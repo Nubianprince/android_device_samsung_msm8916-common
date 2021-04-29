@@ -1,8 +1,4 @@
 allow system_server sysfs_mdnie:file rw_file_perms;
-allow system_server init:binder { call };
-allow system_server userspace_reboot_config_prop:file { read };
-allow system_server userspace_reboot_config_prop:file { open };
-allow system_server userspace_reboot_config_prop:file { getattr };
 
 r_dir_file(system_server, app_efs_file)
 allow system_server vibrator_sysfs_file:dir search;
@@ -12,3 +8,4 @@ allow system_server vibrator_sysfs_file:file rw_file_perms;
 # run on big cores for app launch (sched_boost) - instead of just
 # boosting them to make it "more likely" to run on big cores.
 allow system_server domain:process setsched;
+allow system_server init:binder { call };
