@@ -72,7 +72,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/audio/mixer_paths.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/mixer_paths.xml
 
-
 # Audio encoders
 PRODUCT_PROPERTY_OVERRIDES += \
     qcom.hw.aac.encoder=false
@@ -100,11 +99,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
     vendor.voice.record.conc.disabled=true \
     vendor.voice.voip.conc.disabled=true
     
+# Bluetooth
 PRODUCT_PACKAGES += \
     libbase_shim \
     libbt-vendor
 
-# Bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \
     bluetooth.hfp.client=1 \
     ro.bluetooth.dun=true \
@@ -163,12 +162,14 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PACKAGES += \
     android.hardware.graphics.allocator@2.0-impl \
     android.hardware.graphics.allocator@2.0-service \
+    android.hardware.graphics.composer@2.1-impl \
     android.hardware.graphics.composer@2.1-service \
     android.hardware.graphics.mapper@2.0-impl \
     android.hardware.memtrack@1.0-impl \
     android.hardware.memtrack@1.0-service \
     gralloc.msm8916 \
     hwcomposer.msm8916 \
+    libgenlock \
     libtinyxml \
     libtinyxml2 \
     memtrack.msm8916
@@ -181,6 +182,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.drm@1.0-impl \
     android.hardware.drm@1.0-service \
+    android.hardware.drm@1.1-service.widevine \
     android.hardware.drm@1.2-service.clearkey
 
 # Ebtables
@@ -408,7 +410,6 @@ PRODUCT_PACKAGES += \
     fstab.qcom \
     init.class_main.sh \
     init.link_ril_db.sh \
-    init.qcom.fm.sh \
     init.qcom.post_boot.sh \
     init.qcom.rc \
     init.qcom.sh \

@@ -1,4 +1,8 @@
 allow system_server sysfs_mdnie:file rw_file_perms;
+allow system_server init:binder { call };
+allow system_server userspace_reboot_config_prop:file { read };
+allow system_server userspace_reboot_config_prop:file { open };
+allow system_server userspace_reboot_config_prop:file { getattr };
 
 r_dir_file(system_server, app_efs_file)
 allow system_server vibrator_sysfs_file:dir search;
