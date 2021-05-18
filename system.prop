@@ -1,2 +1,5 @@
 # Netflix
-ro.netflix.bsp_rev=Q855-16947-1
+ro.netflix.bsp_rev=Q660-13149-1
+
+# FACEUNLOCK
+vendor.camera.aux.packagelist=com.crdroid.faceunlock
