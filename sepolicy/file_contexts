@@ -19,6 +19,14 @@
 /sys/devices/battery\.[0-9]+/power_supply/battery(/.*)?                                                    u:object_r:sysfs_batteryinfo:s0
 /sys/devices/battery\.[0-9]+/battery(/.*)?                                                                 u:object_r:sysfs_batteryinfo:s0
 
+# DRM
+/vendor/bin/hw/android\.hardware\.drm@\[0-9]+\.[0-9]+-service\.clearkey     u:object_r:hal_drm_clearkey_exec:s0
+/data/vendor/mediadrm(/.*)?                                                 u:object_r:mediadrm_vendor_data_file:s0
+
+#/vendor/bin/hw/android\.hardware\.drm@1\.1-service\.widevine                u:object_r:hal_drm_widevine_exec:s0
+#/vendor/bin/hw/android\.hardware\.drm@1\.1-service\.clearkey                u:object_r:hal_drm_clearkey_exec:s0
+#/data/vendor/mediadrm(/.*)?                                 u:object_r:media_data_file:s0
+
 # EFS
 /efs/bluetooth(/.*)?                                 u:object_r:bluetooth_efs_file:s0
 /efs/FactoryApp(/.*)?                                u:object_r:app_efs_file:s0
@@ -27,6 +35,9 @@
 
 # Firmware
 /firmware-modem(/.*)?                                u:object_r:firmware_file:s0
+
+# Gatekeeper
+/(vendor|system/vendor)/bin/hw/android\.hardware\.gatekeeper@1\.0-service\.software       u:object_r:hal_gatekeeper_default_exec:s0
 
 # Macloader
 /system/bin/macloader                                u:object_r:macloader_exec:s0
@@ -44,7 +55,9 @@
 # RIL
 /dev/socket/rild-cas                                 u:object_r:rild_cas_socket:s0
 
-/tombstones             u:object_r:rootfs:s0
+# TimeKeep
+/sys/devices/soc\.0/qpnp-rtc-[0-9]/rtc/rtc0(/.*)?    u:object_r:sysfs_rtc:s0
+/(system/vendor|vendor)/bin/timekeep                 u:object_r:timekeep_exec:s0
 
 # USB
 /sys/devices/platform/msm_hsusb/gadget/lun0(/.*)?    u:object_r:sysfs_android_usb:s0

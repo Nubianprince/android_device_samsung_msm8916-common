@@ -14,20 +14,17 @@ vendor/lib/libaudcal.so
 -vendor/lib/libaudioalsa.so
 vendor/lib/liblistensoundmodel2.so
 -vendor/lib/libqct_resampler.so
-vendor/lib/soundfx/libqcbassboost.so
-vendor/lib/soundfx/libqcreverb.so
-vendor/lib/soundfx/libqcvirt.so
 
 # AptX - (Moto griffin - NCLS25.86-11-4-6-5)
 vendor/lib/libaptX_encoder.so|b03772672144d4b750a5672c2922aded93bb0512
 vendor/lib/libaptXHD_encoder.so|b65cd3b72ae3e6a57901fd5b5383bfa1a88c5737
 
-# Bluetooth
-vendor/bin/hw/android.hardware.bluetooth@1.0-service-qti|1bb293fcee8c93e6e5850592491336306e0b7fed
-vendor/etc/init/android.hardware.bluetooth@1.0-service-qti.rc|1a2dc1c2d217f47b9c99a0afa9e4912abd32e381
-vendor/lib/hw/android.hardware.bluetooth@1.0-impl-qti.so|dfe077d09d2c89e80429d68c70e6bb80286afb1e
-vendor/lib/com.qualcomm.qti.bluetooth_audio@1.0_vendor.so|c31edee39b8c25fe0fba7efd36267ffded5785c6
--vendor/lib/libbtnv.so|9b6845a4206e1423b9d476fd6e290930ec6d0d4a
+# Bluetooth - from aljeter - PPP29.55-35
+vendor/bin/hw/android.hardware.bluetooth@1.0-service-qti|45986b1685eb84a02832e43937dd504ca4520855
+vendor/etc/init/android.hardware.bluetooth@1.0-service-qti.rc|a979981c55f3dcaf6cf2212e71b901ca4d58b959
+vendor/lib/com.qualcomm.qti.bluetooth_audio@1.0.so|18f843be10d756c0f5ad967cb2add77e5c2fd46b
+vendor/lib/hw/android.hardware.bluetooth@1.0-impl-qti.so|2312d4c4c28068c88d596a76a7efc53511e838fb
+-vendor/lib/libbtnv.so|f2143391527de9b57dcd27c974ea9de452609d04
 
 # Camera
 bin/mm-qcamera-daemon:vendor/bin/mm-qcamera-daemon
@@ -66,12 +63,10 @@ vendor/lib/libtzplayready.so
 vendor/lib/mediadrm/libprmediadrmdecrypt.so
 vendor/lib/mediadrm/libprmediadrmplugin.so
 
-# FM
-bin/fmconfig:vendor/bin/fmconfig
-bin/fm_qsoc_patches:vendor/bin/fm_qsoc_patches
--lib/vendor.qti.hardware.fm@1.0.so
-vendor/lib/hw/vendor.qti.hardware.fm@1.0-impl.so
-vendor/lib/vendor.qti.hardware.fm@1.0_vendor.so
+# FM - from aljeter - PPP29.55-35
+-lib/vendor.qti.hardware.fm@1.0.so|28af07881f613f1ce7f45b7ca93d41395355eb17
+vendor/lib/hw/vendor.qti.hardware.fm@1.0-impl.so|7050548ed6180facae36a7853f22dbc1007a222f
+vendor/lib/vendor.qti.hardware.fm@1.0.so|28af07881f613f1ce7f45b7ca93d41395355eb17
 
 # GPS - From Crackling
 -lib/libloc_api_v02.so:vendor/lib/libloc_api_v02.so|03860b5a4e72edd96c9acce3886b6d23
@@ -167,11 +162,6 @@ vendor/lib/libfastcvopt.so
 vendor/lib/libscve_mv.so
 vendor/lib/libscve.so
 
-# Perf
-vendor/bin/perfd
-vendor/lib/libqti-at.so
-vendor/lib/libqti-perfd-client.so
-
 # Post-processing
 vendor/lib/libmm-als.so
 vendor/lib/libmm-abl.so
@@ -224,9 +214,6 @@ vendor/lib/libthermalclient.so
 vendor/lib/libthermalioctl.so
 
 # Time services
--app/TimeService/TimeService.apk
-bin/time_daemon:vendor/bin/time_daemon
-vendor/lib/libTimeService.so
 -vendor/lib/libtime_genoff.so
 
 # Widevine - bullhead
