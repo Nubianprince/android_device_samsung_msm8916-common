@@ -3,3 +3,4 @@ allow qti_init_shell btnvtool_exec:file rx_file_perms;
 allow qti_init_shell hci_attach_dev:chr_file rw_file_perms;
 allow qti_init_shell qmuxd_socket:dir search;
 allow qti_init_shell sysfs_android_usb:file rw_file_perms;
+allow qti_init_shell exported3_default_prop:property_service { set };

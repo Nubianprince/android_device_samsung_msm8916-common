@@ -1,3 +1,7 @@
 allow servicemanager mediaswcodec:dir { search };
 allow servicemanager mediaswcodec:file { read };
 allow servicemanager mediaswcodec:file { open };
+allow servicemanager hal_power_default:dir { search };
+allow servicemanager hal_power_default:file { read };
+allow servicemanager hal_power_default:file { open };
+allow servicemanager hal_power_default:process { getattr };

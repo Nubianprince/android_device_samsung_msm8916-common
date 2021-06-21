@@ -187,7 +187,8 @@ PRODUCT_PACKAGES += \
 # DRM
 PRODUCT_PACKAGES += \
     android.hardware.drm@1.0-impl \
-    android.hardware.drm@1.0-service
+    android.hardware.drm@1.0-service \
+    android.hardware.drm@1.3-service.clearkey
 
 
 # Ebtables
@@ -385,8 +386,12 @@ PRODUCT_PACKAGES += \
     android.hardware.power-service-qti
 
 # Protobuf
-PRODUCT_COPY_FILES += \
-    prebuilts/vndk/v29/arm/arch-arm-armv7-a-neon/shared/vndk-core/libprotobuf-cpp-lite.so:$(TARGET_COPY_OUT_VENDOR)/lib/libprotobuf-cpp-lite-v29.so
+PRODUCT_PACKAGES += \
+    libprotobuf-cpp-lite-vendorcompat
+
+
+PRODUCT_PACKAGES += \
+    libprotobuf-cpp-full
 
 # Radio
 PRODUCT_PACKAGES += \
@@ -460,8 +465,7 @@ PRODUCT_COPY_FILES += \
 # Sensor HAL
 PRODUCT_PACKAGES += \
     android.hardware.sensors@1.0-impl \
-    android.hardware.sensors@1.0-service \
-    sensors.msm8916
+    android.hardware.sensors@1.0-service
 
 # Thermal
 PRODUCT_COPY_FILES += \

@@ -5,4 +5,5 @@ type rild_cas_socket, file_type;
 type sysfs_mdnie, fs_type, sysfs_type;
 type vibrator_sysfs_file, fs_type, sysfs_type;
 type wifi_efs_file, file_type;
+type misc_writer_prop, file_type;
 type mediadrm_vendor_data_file, file_type, data_file_type;

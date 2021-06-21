@@ -6,3 +6,7 @@ allow zygote proc_cmdline:file { getattr };
 allow zygote sysfs:file { read };
 allow zygote sysfs:file { open };
 allow zygote sysfs:file { getattr };
+allow zygote bluetooth_prop:file { read };
+allow zygote bluetooth_prop:file { open };
+allow zygote bluetooth_prop:file { getattr };
+allow zygote exported_camera_prop:file { read };
