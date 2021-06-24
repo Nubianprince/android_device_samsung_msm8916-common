@@ -1,11 +1,1 @@
 allow init rild_cas_socket:sock_file w_file_perms;
-allow init efs_file:dir { mounton };
-allow init vendor_file:file { execute_no_trans };
-allow init system_file:file { execute_no_trans };
-allow init sysfs_batteryinfo:file { setattr };
-allow init vendor_toolbox_exec:file { execute_no_trans };
-allow init sysfs_graphics:file { write };
-allow init sysfs_graphics:file { open };
-allow init sysfs_graphics:file { read };
-allow init hwservicemanager:binder { call };
-allow init hwservicemanager:binder { transfer };

@@ -1,1 +1,0 @@
-allow hal_memtrack_default system_app:file { read };

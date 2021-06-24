@@ -100,9 +100,9 @@ TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 BOARD_ROOT_EXTRA_FOLDERS := firmware firmware-modem persist efs
 
-
 # HIDL
 DEVICE_MANIFEST_FILE := $(PLATFORM_PATH)/manifest.xml
+DEVICE_MATRIX_FILE := $(PLATFORM_PATH)/compatibility_matrix.xml
 ifeq ($(filter gt58wifi gt510wifi gtelwifiue,$(TARGET_DEVICE)),)
 DEVICE_MANIFEST_FILE += $(PLATFORM_PATH)/manifest_telephony.xml
 endif
@@ -132,7 +132,7 @@ BOARD_ROOT_EXTRA_FOLDERS := efs firmware firmware-modem persist
 TARGET_KERNEL_CONFIG := msm8916_sec_defconfig
 TARGET_KERNEL_SELINUX_CONFIG := selinux_defconfig
 TARGET_KERNEL_SELINUX_LOG_CONFIG := selinux_log_defconfig
-TARGET_KERNEL_SOURCE := kernel/samsung/ev
+TARGET_KERNEL_SOURCE := kernel/samsung/ev-oc
 
 # Lights
 TARGET_PROVIDES_LIBLIGHT := true
@@ -225,8 +225,7 @@ TARGET_LD_SHIM_LIBS := \
     /vendor/lib/libsec-ril-dsds.so|libshim_secril.so \
     /vendor/lib/hw/camera.vendor.msm8916.so|libcamera_shim.so \
     /vendor/lib/libizat_core.so|libshim_gps.so \
-    /vendor/lib/libqomx_jpegenc.so|libboringssl-compat.so \
-    /vendor/lib/hw/android.hardware.bluetooth@1.0-impl-qti.so|libbase_shim.so
+    /vendor/lib/libqomx_jpegenc.so|libboringssl-compat.so
 
 # Time services
 BOARD_USES_QC_TIME_SERVICES := true

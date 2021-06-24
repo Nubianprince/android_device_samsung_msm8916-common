@@ -1,2 +1,0 @@
-allow hal_sensors_default sysfs:dir { read };
-allow hal_sensors_default sysfs:dir { open };

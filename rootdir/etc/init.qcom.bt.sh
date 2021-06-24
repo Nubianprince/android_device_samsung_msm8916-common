@@ -1,5 +1,5 @@
 #!/vendor/bin/sh
-# Copyright (c) 2009-2011, 2015, The Linux Foundation. All rights reserved.
+# Copyright (c) 2009-2016, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -26,12 +26,7 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-setprop vendor.hw.fm.init 0
-
-mode=`getprop vendor.hw.fm.mode`
-version=199217
-
-LOG_TAG="qcom-fm"
+LOG_TAG="qcom-bluetooth"
 LOG_NAME="${0}:"
 
 loge ()
@@ -50,41 +45,47 @@ failed ()
   exit $2
 }
 
-logi "In FM shell Script"
-logi "mode: $mode"
-logi "Version : $version"
+# BR/EDR & LE power class configurations
+POWER_CLASS=`getprop qcom.bt.dev_power_class`
+LE_POWER_CLASS=`getprop qcom.bt.le_dev_pwr_class`
 
-#$fm_qsoc_patches <fm_chipVersion> <enable/disable WCM>
-#
-case $mode in
-  "normal")
-        logi "inserting the radio transport module"
-        echo 1 > /sys/module/radio_iris_transport/parameters/fmsmd_set
-        /vendor/bin/fm_qsoc_patches $version 0
-     ;;
-  "wa_enable")
-   /vendor/bin/fm_qsoc_patches $version 1
-     ;;
-  "wa_disable")
-   /vendor/bin/fm_qsoc_patches $version 2
-     ;;
-   *)
-    logi "Shell: Default case"
-    /vendor/bin/fm_qsoc_patches $version 0
-    ;;
+setprop vendor.bluetooth.status off
+
+case $POWER_CLASS in
+  1) PWR_CLASS="-p 0" ;
+     logi "Power Class: 1";;
+  2) PWR_CLASS="-p 1" ;
+     logi "Power Class: 2";;
+  3) PWR_CLASS="-p 2" ;
+     logi "Power Class: CUSTOM";;
+  *) PWR_CLASS="";
+     logi "Power Class: Ignored. Default(1) used (1-CLASS1/2-CLASS2/3-CUSTOM)";
+     logi "Power Class: To override, Before turning BT ON; setprop qcom.bt.dev_power_class <1 or 2 or 3>";;
 esac
 
-exit_code_fm_qsoc_patches=$?
-
-case $exit_code_fm_qsoc_patches in
-   0)
-	logi "FM QSoC calibration and firmware download succeeded"
-   ;;
-  *)
-	failed "FM QSoC firmware download and/or calibration failed" $exit_code_fm_qsoc_patches
-   ;;
+case $LE_POWER_CLASS in
+  1) LE_PWR_CLASS="-P 0" ;
+     logi "LE Power Class: 1";;
+  2) LE_PWR_CLASS="-P 1" ;
+     logi "LE Power Class: 2";;
+  3) LE_PWR_CLASS="-P 2" ;
+     logi "LE Power Class: CUSTOM";;
+  *) LE_PWR_CLASS="-P 1";
+     logi "LE Power Class: Ignored. Default(2) used (1-CLASS1/2-CLASS2/3-CUSTOM)";
+     logi "LE Power Class: To override, Before turning BT ON; setprop qcom.bt.le_dev_pwr_class <1 or 2 or 3>";;
 esac
 
-setprop vendor.hw.fm.init 1
+eval $(/vendor/bin/hci_qcomm_init -e $PWR_CLASS $LE_PWR_CLASS && echo "exit_code_hci_qcomm_init=0" || echo "exit_code_hci_qcomm_init=1")
+
+case $exit_code_hci_qcomm_init in
+  0) logi "Bluetooth QSoC firmware download succeeded, $BTS_DEVICE $BTS_TYPE $BTS_BAUD $BTS_ADDRESS";;
+  *) failed "Bluetooth QSoC firmware download failed" $exit_code_hci_qcomm_init;
+
+     setprop vendor.bluetooth.status off
+
+     exit $exit_code_hci_qcomm_init;;
+esac
+
+setprop vendor.bluetooth.status on
 
 exit 0
