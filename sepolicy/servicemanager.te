@@ -1,0 +1,4 @@
+allow servicemanager hal_power_default:dir { search };
+allow servicemanager hal_power_default:file { read };
+allow servicemanager hal_power_default:file { open };
+allow servicemanager hal_power_default:process { getattr };
