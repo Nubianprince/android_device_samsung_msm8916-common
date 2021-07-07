@@ -427,8 +427,7 @@ PRODUCT_PACKAGES += \
 
 # RenderScript HAL
 PRODUCT_PACKAGES += \
-    android.hardware.renderscript@1.0-impl \
-    android.hardware.renderscript@1.0-service
+    android.hardware.renderscript@1.0-impl
 
 # RRO
 PRODUCT_ENFORCE_RRO_TARGETS := \
@@ -522,7 +521,6 @@ PRODUCT_PACKAGES += \
     hostapd \
     hostapd_cli \
     libwpa_client \
-    libwcnss_qmi \
     wcnss_service \
     wificond \
     wpa_supplicant \
