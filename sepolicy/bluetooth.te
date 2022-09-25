@@ -1,3 +1,0 @@
-allow bluetooth device:chr_file { read write };
-allow bluetooth device:chr_file { open };
-allow bluetooth device:chr_file { ioctl };

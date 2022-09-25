@@ -14,17 +14,18 @@ vendor/lib/libaudcal.so
 -vendor/lib/libaudioalsa.so
 vendor/lib/liblistensoundmodel2.so
 -vendor/lib/libqct_resampler.so
+vendor/lib/soundfx/libqcbassboost.so
+vendor/lib/soundfx/libqcreverb.so
+vendor/lib/soundfx/libqcvirt.so
 
 # AptX - (Moto griffin - NCLS25.86-11-4-6-5)
 vendor/lib/libaptX_encoder.so|b03772672144d4b750a5672c2922aded93bb0512
 vendor/lib/libaptXHD_encoder.so|b65cd3b72ae3e6a57901fd5b5383bfa1a88c5737
 
-# Bluetooth - from aljeter - PPP29.55-35
-vendor/bin/hw/android.hardware.bluetooth@1.0-service-qti|45986b1685eb84a02832e43937dd504ca4520855
-vendor/etc/init/android.hardware.bluetooth@1.0-service-qti.rc|a979981c55f3dcaf6cf2212e71b901ca4d58b959
-vendor/lib/com.qualcomm.qti.bluetooth_audio@1.0.so|18f843be10d756c0f5ad967cb2add77e5c2fd46b
-vendor/lib/hw/android.hardware.bluetooth@1.0-impl-qti.so|2312d4c4c28068c88d596a76a7efc53511e838fb
--vendor/lib/libbtnv.so|f2143391527de9b57dcd27c974ea9de452609d04
+# Bluetooth
+bin/btnvtool:vendor/bin/btnvtool
+bin/hci_qcomm_init:vendor/bin/hci_qcomm_init
+-vendor/lib/libbtnv.so|9b6845a4206e1423b9d476fd6e290930ec6d0d4a
 
 # Camera
 bin/mm-qcamera-daemon:vendor/bin/mm-qcamera-daemon
@@ -63,12 +64,15 @@ vendor/lib/libtzplayready.so
 vendor/lib/mediadrm/libprmediadrmdecrypt.so
 vendor/lib/mediadrm/libprmediadrmplugin.so
 
-# FM - from aljeter - PPP29.55-35
--lib/vendor.qti.hardware.fm@1.0.so|28af07881f613f1ce7f45b7ca93d41395355eb17
-vendor/lib/hw/vendor.qti.hardware.fm@1.0-impl.so|7050548ed6180facae36a7853f22dbc1007a222f
-vendor/lib/vendor.qti.hardware.fm@1.0.so|28af07881f613f1ce7f45b7ca93d41395355eb17
+# FM
+bin/fmconfig:vendor/bin/fmconfig
+bin/fm_qsoc_patches:vendor/bin/fm_qsoc_patches
+-lib/vendor.qti.hardware.fm@1.0.so:vendor/lib/vendor.qti.hardware.fm@1.0.so
+vendor/lib/hw/vendor.qti.hardware.fm@1.0-impl.so
+vendor/lib/vendor.qti.hardware.fm@1.0_vendor.so
 
 # GPS - From Crackling
+bin/loc_launcher:vendor/bin/loc_launcher
 -lib/libloc_api_v02.so:vendor/lib/libloc_api_v02.so|03860b5a4e72edd96c9acce3886b6d23
 -lib/libloc_ds_api.so:vendor/lib/libloc_ds_api.so|31c3c73f4e449eded83f32eabc561c29
 vendor/lib/hw/flp.default.so|48b1901aac6ce882c415dcbbffc36432
@@ -92,7 +96,7 @@ vendor/lib/egl/libRBEGL_adreno.so|f2fc963450474859aa7c7ccf6fac92b6
 vendor/lib/egl/libRBGLESv1_CM_adreno.so|5719e42981a1acc1df1a8878312bdca5
 vendor/lib/egl/libRBGLESv2_adreno.so|4d831f9d61222398f09eb15d4f4e7395
 vendor/lib/libadreno_utils.so|b74a626858dd1b3411e8199694bd5da8
-vendor/lib/libbccQTI.so|19ab8268addaa5b73631551dbc61154581636eca
+vendor/lib/libbccQTI.so
 vendor/lib/libC2D2.so|9ce02ff41421ec64d26b571c479fe6ca
 vendor/lib/libc2d30-a3xx.so|91c8e82b10afda25a727ffc94dad5bc5
 vendor/lib/libc2d30-a4xx.so|5fb624bd78b3ac8bacd2a9f1226db103
@@ -104,7 +108,7 @@ vendor/lib/libOpenCL.so|c68ff0a56dc1c98be520b08e7eb6fee1
 vendor/lib/librs_adreno.so|40dbf893c0fd2ad8583d9937e9c92d3f
 vendor/lib/librs_adreno_sha1.so|4f695154805ab290651af850fad24d81
 vendor/lib/libRSDriver_adreno.so|bd572f3fc34e9dd747753f14a73fb133
-vendor/lib/libsc-a2xx.so|e77ab8037922317711a78763a90f58fa6feeea44
+vendor/lib/libsc-a2xx.so
 vendor/lib/libsc-a3xx.so|42193ceddf52b1c6e5914d8c20c9f4ab
 vendor/lib/libscale.so|811e35d84497eeafd66952fba530c8b8
 
@@ -118,7 +122,8 @@ etc/firmware/leia_pfp_470.fw:vendor/firmware/leia_pfp_470.fw
 etc/firmware/leia_pm4_470.fw:vendor/firmware/leia_pm4_470.fw
 
 # Media
-etc/somxreg.conf:vendor/etc/somxreg.conf
+etc/somxreg.conf
+lib/libOmxVdecHevc.so:vendor/lib/libOmxVdecHevc.so
 lib/libplayready_v2.5.so:vendor/lib/libplayready_v2.5.so
 lib/libsomx263dsw.so:vendor/lib/libsomx263dsw.so
 lib/libsomx264dsw.so:vendor/lib/libsomx264dsw.so
@@ -137,6 +142,7 @@ lib/libsomxvp8d.so:vendor/lib/libsomxvp8d.so
 vendor/lib/libhwdaphal.so
 vendor/lib/libExtendedExtractor.so
 vendor/lib/libFlacSwDec.so
+-vendor/lib/libHevcSwDecoder.so
 vendor/lib/libI420colorconvert.so
 vendor/lib/libmm-abl-oem.so
 vendor/lib/libmm-color-convertor.so
@@ -170,7 +176,7 @@ vendor/lib/libdisp-aba.so
 # Radio
 bin/diag_mdlog:vendor/bin/diag_mdlog
 bin/diag_uart_log:vendor/bin/diag_uart_log
-bin/netmgrd:vendor/bin/netmgrd|3ad51885fabc7a3805bfd8f601024d368aa88365
+bin/netmgrd:vendor/bin/netmgrd
 bin/ftm_ptt:vendor/bin/ftm_ptt
 bin/ptt_socket_app:vendor/bin/ptt_socket_app
 bin/port-bridge:vendor/bin/port-bridge
@@ -178,9 +184,9 @@ bin/qmuxd:vendor/bin/qmuxd
 bin/radish:vendor/bin/radish
 bin/rmt_storage:vendor/bin/rmt_storage
 bin/wlandutservice:vendor/bin/wlandutservice
-etc/plmn_delta.bin:vendor/etc/plmn_delta.bin
-etc/plmn_se13.bin:vendor/etc/plmn_se13.bin
-etc/srm.bin:vendor/etc/srm.bin
+etc/plmn_delta.bin
+etc/plmn_se13.bin
+etc/srm.bin
 lib/libatparser.so:vendor/lib/libatparser.so
 lib/libcordon.so:vendor/lib/libcordon.so
 lib/libfactoryutil.so:vendor/lib/libfactoryutil.so
@@ -199,6 +205,7 @@ lib/libsecril-client.so:vendor/lib/libsecril-client.so
 vendor/lib/libril-qcril-hook-oem.so
 
 # Samsung libs
+lib/libsecnativefeature.so:vendor/lib/libsecnativefeature.so
 lib/libseckeyprov.so:vendor/lib/libseckeyprov.so
 
 # Security
@@ -209,11 +216,14 @@ lib/libgdmcprov.so:vendor/lib/libgdmcprov.so
 vendor/lib/libstlport.so|76fbc529632aae39370a7f28a1d839cd
 
 # Thermal
-vendor/bin/thermal-engine|29386f978cb46632596c463efec52d3cd188c711
+vendor/bin/thermal-engine
 vendor/lib/libthermalclient.so
 vendor/lib/libthermalioctl.so
 
 # Time services
+-app/TimeService/TimeService.apk
+bin/time_daemon:vendor/bin/time_daemon
+vendor/lib/libTimeService.so
 -vendor/lib/libtime_genoff.so
 
 # Widevine - bullhead
@@ -221,4 +231,4 @@ vendor/lib/drm/libdrmwvmplugin.so|6cfb61cd247076409a3a4e3f6ddecf24
 vendor/lib/libwvdrm_L1.so|a19e8a30943ed66d51f58504673e72c4
 vendor/lib/libwvm.so|dcd816349037aa40f0e5ff9d141c70cc
 vendor/lib/libWVStreamControlAPI_L1.so|74e4a4ba035ed5da9b81cc2cc3929151
-vendor/lib/mediadrm/libwvdrmengine.so|66ba66d047044f92eb0eada1faf6a5799ded90ab
+vendor/lib/mediadrm/libwvdrmengine.so|76d0add4f3f259030ef4ffb14dc92a2e

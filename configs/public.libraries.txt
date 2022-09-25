@@ -1,3 +1,0 @@
-libexifa.so
-libjpega.so
-libqti-perfd-client.so

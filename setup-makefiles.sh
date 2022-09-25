@@ -1,103 +1,81 @@
 #!/bin/bash
 #
 # Copyright (C) 2016 The CyanogenMod Project
-# Copyright (C) 2017 The LineageOS Project
+# Copyright (C) 2017-2020 The LineageOS Project
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# SPDX-License-Identifier: Apache-2.0
 #
 
 set -e
 
-BOARD_COMMON=msm8916-common
+DEVICES_A3="a3lte a33g a3ulte"
+DEVICES_A5="a5ltechn a5ltectc"
+DEVICES_GPRIME="fortuna3g fortunave3g fortunalteub gprimelte gprimeltexx gprimeltespr gprimeltetfnvzw gprimeltezt gprimeltectc"
+DEVICES_GTE="gtelwifiue gtesqltespr gt510wifi"
+DEVICES_J3="j3ltectc j3ltespr"
+DEVICES_J3XPRO="j3xprolte"
+DEVICES_J5="j53gxx j5lte j5ltechn j5nlte"
+DEVICES_J5X="j5xnlte j5xlte j5xltecmcc"
+DEVICES_J7="j7ltespr j7ltechn"
+DEVICES_O7="o7prolte on7ltechn"
+DEVICES_SERRANO="serranovelte serranove3g"
 
-PLATFORMS="msm8916 msm8939"
-
-VENDOR=samsung
-
-INITIAL_COPYRIGHT_YEAR=2017
+DEVICES_ALL="$DEVICES_A3 $DEVICES_A5 $DEVICES_GPRIME $DEVICES_GTE $DEVICES_J3 $DEVICES_J3XPRO \
+	$DEVICES_J5 $DEVICES_J5X $DEVICES_J7 $DEVICES_O7 $DEVICES_SERRANO"
 
 # Load extract_utils and do some sanity checks
 MY_DIR="${BASH_SOURCE%/*}"
-if [[ ! -d "$MY_DIR" ]]; then MY_DIR="$PWD"; fi
+if [[ ! -d "${MY_DIR}" ]]; then MY_DIR="${PWD}"; fi
 
-LINEAGE_ROOT="$MY_DIR"/../../..
-DEVICE_DIR="$MY_DIR"/../$DEVICE
-DEVICE_COMMON_DIR="$MY_DIR"/../$DEVICE_COMMON
+ANDROID_ROOT="${MY_DIR}/../../.."
 
-# determine which blob dirs to set up
-if [ -z "$SETUP_BOARD_COMMON_DIR" ]; then
-    SETUP_BOARD_COMMON_DIR=1
+HELPER="${ANDROID_ROOT}/tools/extract-utils/extract_utils.sh"
+if [ ! -f "${HELPER}" ]; then
+    echo "Unable to find helper script at ${HELPER}"
+    exit 1
 fi
+source "${HELPER}"
 
-if [ -z "$SETUP_DEVICE_DIR" ]; then
-    SETUP_DEVICE_DIR=0
-fi
+# Initialize the helper for common
+setup_vendor "${DEVICE_COMMON}" "${VENDOR}" "${ANDROID_ROOT}" true
 
-if [ -z "$SETUP_DEVICE_COMMON_DIR" ]; then
-    SETUP_DEVICE_COMMON_DIR=0
-fi
+# Warning headers and guards
+write_headers "${DEVICES_ALL}"
 
-HELPER="$LINEAGE_ROOT"/vendor/lineage/build/tools/extract_utils.sh
-if [ ! -f "$HELPER" ]; then
-    HELPER="$LINEAGE_ROOT"/vendor/ev/build/tools/extract_utils.sh
-    if [ ! -f "$HELPER" ]; then
-        echo "Unable to find helper script at $HELPER"
-        exit 1
-    fi
-fi
-. "$HELPER"
+# The standard common blobs
+write_makefiles "${MY_DIR}/proprietary-files.txt" true
 
-if [ "$SETUP_DEVICE_COMMON_DIR" -eq 1 ] && [ -s $DEVICE_COMMON_DIR/proprietary-files.txt ]; then
-    # Reinitialize the helper for device
-    setup_vendor "$DEVICE_COMMON" "$VENDOR" "$LINEAGE_ROOT" true
+# Finish
+write_footers
 
-    # Copyright headers and guards
-    write_headers "$DEVICES"
+if [ -s "${MY_DIR}/../${DEVICE_SPECIFIED_COMMON}/proprietary-files.txt" ]; then
+    DEVICE_COMMON="${DEVICE_SPECIFIED_COMMON}"
 
-    # The standard device blobs
-    write_makefiles $DEVICE_COMMON_DIR/proprietary-files.txt
+    # Reinitialize the helper for device specified common
+    setup_vendor "${DEVICE_SPECIFIED_COMMON}" "${VENDOR}" "${ANDROID_ROOT}" true
 
-    # We are done!
+    # Warning headers and guards
+    write_headers "${DEVICE_SPECIFIED_COMMON_DEVICE}"
+
+    # The standard device specified common blobs
+    write_makefiles "${MY_DIR}/../${DEVICE_SPECIFIED_COMMON}/proprietary-files.txt" true
+
+    # Finish
     write_footers
+
+    DEVICE_COMMON="msm8916-common"
 fi
 
-if [ "$SETUP_DEVICE_DIR" -eq 1 ] && [ -s $DEVICE_DIR/proprietary-files.txt ]; then
+if [ -s "${MY_DIR}/../${DEVICE}/proprietary-files.txt" ]; then
     # Reinitialize the helper for device
-    setup_vendor "$DEVICE" "$VENDOR" "$LINEAGE_ROOT"
+    setup_vendor "${DEVICE}" "${VENDOR}" "${ANDROID_ROOT}" false
 
-    # Copyright headers and guards
+    # Warning headers and guards
     write_headers
 
     # The standard device blobs
-    write_makefiles $DEVICE_DIR/proprietary-files.txt
+    write_makefiles "${MY_DIR}/../${DEVICE}/proprietary-files.txt" true
 
-    # We are done!
+    # Finish
     write_footers
-fi
-
-if  [ "$SETUP_BOARD_COMMON_DIR" -eq 1 ]; then
-   # set up the board common makefiles
-   DEVICE_COMMON=$BOARD_COMMON
-
-   # Initialize the helper
-   setup_vendor "$BOARD_COMMON" "$VENDOR" "$LINEAGE_ROOT" true
-
-   # Copyright headers and guards
-   write_headers $VENDOR BOARD_VENDOR
-   write_headers "$PLATFORMS" TARGET_BOARD_PLATFORM
-
-   write_makefiles "$MY_DIR"/proprietary-files.txt
-
-   # Finish
-   write_footers
 fi
